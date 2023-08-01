@@ -23,14 +23,6 @@ etc/group - nastavenia jednotlivej grupy
 
 Inštalovanie softvéru
 
-
-nano - text editor 
-
-Skript
-#!/bin/bash- Shebang - určujem v ktorom jazyku budem písať skript, a musí byť na začiatku každého skriptu, aby shell vedel, že sa jedná o skript.
-Každý skript musí byť musíme následne nastaviť na execute chmod +x skript.sh
-bash skript.sh #spustenie skriptu
-
 chmod u+x <file> # urobí súbor pre user executable X  
 chown - Change the owner and/or group of each FILE to OWNER and/or GROUP.
 read číta zadanie z klávesnice read name
@@ -53,8 +45,8 @@ Redirection - ak urobíme redirection už nieje možné PIPovať
 xargs - ak command neakceptuje STDIN, tak použiješ xargs, zmení input na 
 tee - križovatka - napr uloží do súboru a vypíše v konzole napr:
 date | tee fulldate.txt | cut -d " " -f  - t.j. do súboru uloží plný dátum a na konzole vypíše len prvý stlpec
-touch vytovrí súbor
-mkdir - vutvorí zložku
+touch vytvorí súbor
+mkdir - vytvorí zložku
 	mkdir -p /z1/z2 #ak cesta neexistuje tak vytvorí rodicovské 
 
 
@@ -179,7 +171,8 @@ sudo cat /etc/shadow
 #nájdenie group
 sudo cat /etc/group
 
-file #zistím o aký typ súboru sa jedná
+file bash_script #zistím o aký typ súboru sa jedná
+
 tar # kompresia - pozri Cheat sheet
 
 
@@ -214,6 +207,19 @@ apt #advanced package tool
 apt-cache search "web server" #nájde apku ktorá v sebe obsahuje "web server"
 apt-cache show apache2 #ukáže podrobnosti ohľadom určitého balíčku
 /var/lib/apt/lists  #dostupné balíčky
+
+__________________________
+
+Skript
+nano - text editor 
+#!/bin/bash-  - určujem v ktorom jazyku budem písať skript, a musí byť na začiatku každého skriptu, aby shell vedel, že sa jedná o skript.
+#!Shebang musí byť na začiatku každého skriptu
+Každý skript musí byť musíme následne nastaviť na execute chmod +x skript.sh
+bash skript.sh #spustenie skriptu
+na konci skriptu by nemal chýbať exit kód
+	exit 0
+
+
 
 
 
