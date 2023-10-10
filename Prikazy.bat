@@ -30,7 +30,7 @@ read číta zadanie z klávesnice read name
 cat
 tac - číta súbor(riadky) v opačnom poradí ako cat (otočí to hore nohami) (vertikálne - stlpcove)
 rev - otočí obsah každého riadku (horizontálne, riadkové)
-less - podobne ako cat ale môžeme skrolovať od hora a postupne prehliadať, zatvorím to písmenom Q.
+head - podobne ako cat ale môžeme skrolovať od hora a postupne prehliadať, zatvorím to písmenom Q.
 head - zobrazí len prvých 10 riadkov, -n určí koľko riadkov chceme zobraziť  
 tail - opak head
 cut - oreže data
@@ -41,13 +41,20 @@ cut - oreže data
 0< input
 2> error
 
-====================
+====================USEFULL COMMANDS====================
 xargs - ak command neakceptuje STDIN, tak použiješ xargs, zmení input na 
 tee - križovatka - napr uloží do súboru a vypíše v konzole napr:
 date | tee fulldate.txt | cut -d " " -f  - t.j. do súboru uloží plný dátum a na konzole vypíše len prvý stlpec
 touch vytvorí súbor
 mkdir - vytvorí zložku
 	mkdir -p /z1/z2 #ak cesta neexistuje tak vytvorí rodicovské 
+rmdir #vymaže priečinok ktorý je prázdny
+rm -ir #pýta sa na to či vymazať -r vymaže všetko aj so zložkami
+cp <co chceš kopírovať> .. <Kam to chceš kopírovať> # s možnosťou -r skopíruje celý obsah spolu s priečinikom 
+mv <oldfile> <newfile>  #premenuje old na new
+	mv oldfolder/* . # presuň obsah z oldfolder do current adresára
+	mv oldfolder/ ~/destination # presunie celý priečinok do priečinku v home/destination
+	mv destina/copy_me/ ./jackopt # vezme zložku copy_me/ presunie ju do current priečinku a premenuje ju na jackopt
 
 ====================Podmienka====================
 if [[ $beast || $neco == 1]]
@@ -92,19 +99,24 @@ mysql - prihlásenie do databáze
 SHOW DATABASES - zobrazí vytvorené databázy
 
 ====================Vytorenie aliasu====================
-alias nazovAlias='príkaz akýkoľvek'
-vytvoriť (touch) zložku .bash_aliases v /home. Následne si otvoriť nano .bash_aliases a do nej zapísať napr.:
+#docasny,, len do ukoncenia session
+alias shortName="your custom command here" 
 alias getdate='date | tee fulldate.txt | cut --delimiter=" " --fields=1 | tee shortdate.txt | xargs echo hello'
-
+#trvaly / musime to ulozit do shell configu, ktory najdeme  ~/.bashrc a tam ulozime alias ako pri temporary,
+POstup:
+nano ~/.bashrc
+alias ll='ls -lHA'
+source .bashrc #aby sa zmena prejavila potrebujeme spustit scrpit .bashrc
+#odstranenie alias
+unalias alias_name
 ====================Wildcards====================
-	* - vssetko
-	? - zastupený jeden znak
-	[1,2,3] - zastupené všetko co je vramci [], len jeden znak
-	file[1,2][a,b,c] -
-		file[1-5].txt -  nájde file1.txt, file2.txt... file5
-		file[A-Z]
+* - vssetko
+? - zastupený jeden znak
+[1,2,3] - zastupené všetko co je vramci [], len jeden znak
+file[1,2][a,b,c] -
+file[1-5].txt -  nájde file1.txt, file2.txt... file5
+file[A-Z]
 	
-
 ====================TEXT EDITOR NANO====================	
 nano #text editor
  # ^ - ctrl
@@ -150,15 +162,11 @@ sort -n numbers.txt #zoradí čísla numericky
 ls -lh /etc/ | head -n 20  | sort -k 6M #zoradí prvých 20 riadkov v /etc/priečinku podľa dátumu; sort -k 6M - zoradí podľa -k stlpca (column), 6.v poradí podľa M-mesiac,
 ls -lh /etc/ | head -n 20  | sort -k 5h #ak chcem zoradiť podľa veľkosti súboru, musím zadať možnosť h- human readable
 
-====================
-lsblk #zobrazenie zariadení, ktoré sú pripojené k PC
-====================
+
+====================FILE====================
 
 file bash_script #zistím o aký typ súboru sa jedná
-
-=====================
-
-getent passwd id  #is a Linux command that helps the user to get the entries in a number of important text files called databases
+stat [option]... FILE... #zobrazi status suboru
 
 ====================CRON - plánovač https://crontab.guru/====================
 crontab -e #edit crontab
@@ -166,7 +174,7 @@ minúty 	hodiny	den v mesiaci	mesiac	den v týždni
 */2 	* 				* 		*	 		* 		echo "Hello world" >> ~/Hello.txt #každé 2 minúty zapíš do súboru Hello.txt string Hello World
 service cron restart #reštaruje cron aby začal od znova
 
-====================
+===================zisti verziu os, architektúra CPU, Kernel, name ====================
 cat /etc/os-release 
 lsb_release -a
 hostnamectl 
@@ -178,10 +186,16 @@ cat /proc/cpuinfo
 uname #vypíše  systéemové info
 
 systemd #nastavenie ktoré procesy sa spustia pri štarte systému
+
+lsblk #zobrazenie zariadení, ktoré sú pripojené k PC
+
+top #zobrazi beziace procesy
+
 =====================================Grep ====================
 hľadá nejaký pattern vrámci súboru, nehľadá priečinky
 grep <options> pattern <file...> #hľadá "string" vrácmi súboru, prípadne vrácmi podpriečinkou -r
 grep -l error *.log #Only show the names of files that contain a match
+grep -r search_term . #You can make grep search in all the files and all the subdirectories of the current directory
 =====================================
 
 apt #advanced package tool
@@ -191,32 +205,40 @@ apt-cache show apache2 #ukáže podrobnosti ohľadom určitého balíčku
 ====================
 
 Všetky príkazy sú v /usr/bin/
-====================sudZobrazenie existujucich uzivatelov
+
+====================Zobrazenie existujucich uzivatelov/skupiny====================
 cat /etc/passwd
 #nájdenie uživateľov
 sudo cat /etc/shadow
-#nájdenie group
+#nájdenie grupy
 sudo cat /etc/group
-
+getent group
 ======================== User management ========================
 sudo ---> execute command as a different user (root usually)
 su ---> switch user. Request appropriate user credentials via PAM, then switche
 s to that user. Shell is then executed
 useradd ---> create new or manipulate old user
+useradd -g users -G wheel,developers nathan #hlavna skupina je -g pridat do ostatnych -G
 userdel ---> deletes user account or related files
-usermod ---> manipulate with user account
+usermod -a -G group1,group2 username #prida uzivaela do novych skupin, -a moznost musi byt inac by nas to vyhodilo z ostatnych 
+
 sudo usermod -a -G newgroup username ---> add user to the group
 addgroup ---> create group
 delgroup ---> remove group
 passwd ---> change user password
+gpasswd -d ---> odstranenie uzivatela z grupy
+/etc/login.defs #zistime nasetavenia hesla, loginu
 
-======================== Permissions ========================
+chage -l userName #zobrazi informacie o ucte
+id username/group #zobrazi  informacie pre uzivatela/grupu
+getent passwd id  #is a Linux command that helps the user to get the entries in a number of important text files called databases
+lslogins username #Zobrazenie podrobných informácií o jednom používateľovi
+======================== Permissions/group management  ========================
 chmod ---> changes permission of a file or directory
-chown <owner>:<group> ---> change owner and group of a file or directory
-
-======================== Group management ========================
-etc/group - nastavenia jednotlivej grupy
-puser --> pythg #priradíme python user do pythongroup 
+chown <owner>:<group> file/directory ---> change owner and group of a file or directory
+chgrp new_group file.txt #is used to change group ownership of files and directories in Linux.
+/etc/group - nastavenia jednotlivej grupy
+puser --> pythg #priradíme puser do pythongroup 
 
 ====================VARIABLES and Shell expansions====================
 
@@ -325,19 +347,18 @@ $OLDPWD - ulozena moja predosla pracovna cesta
 	~- je to rovnako ako $OLDPWD
 	
 ==================== Brace expansion vytvorí všetko čo je vrámci zátvoriek {} ====================
+!!!!!!!!!!v zatvorkach nesmie byt medzera !!!!!!!!!!
 mkdir {jan,feb,man}_{2017..2022} #vytvorí zložky jan2017,feb2017,mar2017 .. mar2022
 touch {jan,feb,mar}_{2017..2019}/file{1..100} #každej zložke vytvorí  file1-100
+echo {1..100..3} #zobrazi cisla od 1 do 100 ale kazde 3. cislo
 
-rmdir #vymaže priečinok ktorý je prázdny
-rm -ir #pýta sa na to či vymazať -r vymaže všetko aj so zložkami
+==================== ln ====================
+#qmake links between files
 
-cp <co chceš kopírovať> .. <Kam to chceš kopírovať> # s možnosťou -r skopíruje celý obsah spolu s priečinikom 
-mv <oldfile> <newfile>  #premenuje old na new
-	mv oldfolder/* . # presuň obsah z oldfolder do current adresára
-	mv oldfolder/ ~/destination # presunie celý priečinok do priečinku v home/destination
-	mv destina/copy_me/ ./jackopt # vezme zložku copy_me/ presunie ju do current priečinku a premenuje ju na jackopt
-	
-
+==================== Logs ====================
+#Linux log files
+/var/log
+tail -f /var/log/apt/history.log #-f sleduje live logy, ktore do tabulky pribudnu
 
 
 

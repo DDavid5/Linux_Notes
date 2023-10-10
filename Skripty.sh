@@ -27,6 +27,22 @@ bash skript.sh #spustenie skriptu
 na konci skriptu by nemal chýbať exit kód
 	exit 0
 
+====================Quotings====================
+3 typy zápisu citácií
+	spatné lomítko \backslash\ - odstranuje specialny vyznam dalsieho pismena
+	jednoduche uvodzovdky 'single qoutes' - odstranuju spec. vyznam pre vsetky znaky vramci 
+	dvojite uvodzovky "double qoutes" - odstranuje spec. vyznam zo vsetkych znakov okrem symbolu dolar $  spatného lomitka `backsticks` 
+										- to znamena dolar ma vzdy specialny vyznam vramci ""
+
+Priklady:
+echo john \& jane
+filepath=C:\\Users\\sk8er\\Documents\\David #spatné lomitka musime odeskejpovat alebo pouzit jednoduche uvodzovky
+filepath1='C:\Users\sk8er\Documents\David' #nemoze obsahovat dalsiu jednoduchu uvodzovku
+filepath="C:\Users\\$USER\Documents\David" #moze obsahovat dolar a ` backsticks`, ak je dolar tak musime ho odeskapovat
+
+
+
+
 
 
 
