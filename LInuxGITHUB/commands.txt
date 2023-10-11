@@ -1,0 +1,45 @@
+#Task1
+mkdir audio
+cd audio
+touch song{1..10}.mp3
+cd ..
+ln -s ./audio/ music
+
+#Task2
+sudo addgroup sysadmin
+sudo useradd -g sysadmin rob
+sudo useradd -g sysadmin bob
+ssudo addgroup manager
+sudo usermod -aG manager bob
+sudo usermod -aG manager rob
+sudo passwd bob
+sudo passwd rob
+sudo useradd -G manager max -p linux123
+
+#Task3
+sudo passwd -e bob
+sudo usermod --expiredate "30days" max
+
+#Task4
+mkdir manager
+chgrp managers manager
+chmod 070 manager/
+chown -vR :managers /home/manager
+
+#Task5
+useradd -u 4223 -p Linux123 gabriel
+
+#Task6
+tar -cvjf ~/LinuxProject/archive.tar.bz /etc/hosts
+
+#Task7
+grep udp /etc/services >> ~/LinuxProject/udp_services.txt
+
+#Task8
+top -o +%CPU
+
+#Task9
+echo alias uptime=/bin/uptime >> ~/.bashrc
+
+#Task10
+
