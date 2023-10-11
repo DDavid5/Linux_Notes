@@ -6,10 +6,9 @@ Branch 	- je nová/oddelená verzia hlavného repozitára.
 ====================Branch====================
 git branch hello-world-images #vytovrenie novej branch
 git branch #zobrazi uz vytvorene branch
-git checkout hello-world-images #Presun z aktuálnej vetvy do vetvy zadanej na konci príkazu
 git branch -v # zobrazit poslední revizi na každé větvi
 Užitečné volby --merged a --no-merged vám z tohoto seznamu umožní vyfiltrovat větve, které jste do aktuální větve buď začlenili, nebo dosud nezačlenili. Chcete-li zjistit, které větve už byly začleněny do větve, na níž se nacházíte, spusťte příkaz git branch --merged:
-
+git branch -a #ukaze vsetky branches aj remote
 ====================Inicializacia a commit====================
 git init #inicializujeme nejaký priečinok ako náš repozitár
 
@@ -54,8 +53,15 @@ man git-<příkaz>
 git log --oneline --decorate --graph --all #prehladne zobrazenie vet
 
 
-
-
-
+====================Checkout====================
+git checkout <other-branch-name> -- path/to/your/folder #presunut subor z other branch do terajsej
+Here is the process to follow:
+1. Checkout to the branch where you want to copy the file.
+git checkout feature/A
+2. Once you are on the correct branch, copy the file.
+git checkout feature/B -- utils.js
+-----------------------------------------------------------------
+git checkout hello-world-images #Presun z aktuálnej vetvy do vetvy zadanej na konci príkazu
+git checkout -b názov-branche #vytovri a prihlasi sa do novej branch
 
 
