@@ -18,7 +18,14 @@ bin - všetky príkazy, môžem vytvoriť bin v každom užívateľovi, ale poto
 	a na koniec pridať export PATH=$PATH:$HOME/bin
 	potom aby sa zmena potvrdila je potrebné "source ~/.bashrc"
 	a potom cez chmod pridať x 
-	
+systemctl status/start/stop...  #test status apache2,sql,php... 
+
+sudo !! #predošlý príkaz s root opravnením
+
+man a následne príkaz /dir  -- hľadám zadaný výraz - D, U presúvam medzi hľadným výrazom
+
+which - príkaz ktorý zisti cestu k executable files
+sudo su - #root
 
 ====================Inštalovanie softvéru====================
 
@@ -58,18 +65,12 @@ case
 	2)
 	;;
 esac # ukončuje case
-====================
-systemctl status/start/stop...  #test status apache2,sql,php... 
-
-sudo !! #predošlý príkaz s root opravnením
-
-man a následne príkaz /dir  -- hľadám zadaný výraz - D, U presúvam medzi hľadným výrazom
-
-which - príkaz ktorý zisti cestu k executable files
-
-w #zobrazí kto je prihlásený a čo robí
-
-sudo su - #root
+====================Usefull command====================
+who #príkaz na zistenie, kto je prihlásený
+w  #príkaz na zistenie, kto je prihlásený a kto čo robí
+file bash_script #zistím o aký typ súboru sa jedná
+sudo apt install locate mlocate # inštalácia locate/mlocate 
+lsblk #zobrazenie zariadení, ktoré sú pripojené k PC
 
 ====================Automatic upgrade - Unattended upgrades =============
 sudo apt install unattended-upgrades #softvér na zistenie aktualizácií
@@ -110,13 +111,10 @@ alias getdate='date | tee fulldate.txt | cut --delimiter=" " --fields=1 | tee sh
 nano #text editor
  # ^ - ctrl
  # M - alt
+ # ALT + A markovaci mod
  sudo nano /etc/nanorc # zmena nano nastavení 
 
-who #príkaz na zistenie, kto je prihlásený
-w  #príkaz na zistenie, kto je prihlásený a kto čo robí
-
-sudo apt install locate mlocate # inštalácia locate/mlocate 
- 
+====================Locate====================
 locate -i *.conf #lokalizeuje súbory, bez ohľadu na veľké a malé písmená, ktér majú koncovku .conf
 locate -S #zobrazí štatistiku nejakej databázy
 locate -e #skontrouluje či existuje nejaký súbor
@@ -151,12 +149,6 @@ sort -n numbers.txt #zoradí čísla numericky
 ls -lh /etc/ | head -n 20  | sort -k 6M #zoradí prvých 20 riadkov v /etc/priečinku podľa dátumu; sort -k 6M - zoradí podľa -k stlpca (column), 6.v poradí podľa M-mesiac,
 ls -lh /etc/ | head -n 20  | sort -k 5h #ak chcem zoradiť podľa veľkosti súboru, musím zadať možnosť h- human readable
 
-====================
-lsblk #zobrazenie zariadení, ktoré sú pripojené k PC
-====================
-
-file bash_script #zistím o aký typ súboru sa jedná
-
 =====================
 
 getent passwd id  #is a Linux command that helps the user to get the entries in a number of important text files called databases
@@ -179,29 +171,36 @@ cat /proc/cpuinfo
 uname #vypíše  systéemové info
 
 systemd #nastavenie ktoré procesy sa spustia pri štarte systému
-=====================================Grep ====================
+====================Grep ====================
 hľadá nejaký pattern vrámci súboru, nehľadá priečinky
 grep <options> pattern <file...> #hľadá "string" vrácmi súboru, prípadne vrácmi podpriečinkou -r
 grep -l error *.log #Only show the names of files that contain a match
-=====================================
+grep --color "najdi tento text" vsubore.txt #najdi text bude farebny
+grep -r "Linux" #najdi Linux v priecinku a jeho podpriecinkoch
+grep -w "Najdi presnu zhodu"
+
+grep -A 4 -B 4 ens3  #zobrazi 4 riadky pred a 4 riadky za najdenou zhodou
+====================APT a repozitare====================
+Všetky príkazy sú v /usr/bin/
 
 apt #advanced package tool
 apt-cache search "web server" #nájde apku ktorá v sebe obsahuje "web server"
 apt-cache show apache2 #ukáže podrobnosti ohľadom určitého balíčku
 /var/lib/apt/lists  #dostupné balíčky
-====================
-
-Všetky príkazy sú v /usr/bin/
-
+apt-cache policy <package name> #zisti z ktoreho repo bol balicek nainstalovany
+tail -f /var/log/dpkg.log #subor logov, ktore ukazuju, kedy boli jednotlive balicky nainstalovane
+grep remove /var/log/dpkg.log #zobrazi zmazane apt
+less /var/log/apt/history.log #zobrazi historiu apt
 
 ====================Zobrazenie uzivatelov[group]====================
+adduser uzivatel sudo #prida uzivatela do sudo gruppy
 cat /etc/passwd
 #nájdenie uživateľov
 sudo cat /etc/shadow
 #nájdenie group
 sudo cat /etc/group
 cat etc/group - nastavenia jednotlivej grupy
-======================== User management ========================
+======================== User management/permission ========================
 sudo ---> execute command as a different user (root usually)
 su ---> switch user. Request appropriate user credentials via PAM, then switche
 s to that user. Shell is then executed
@@ -212,12 +211,12 @@ sudo usermod -a -G newgroup username ---> add user to the group
 addgroup ---> create group
 delgroup ---> remove group
 passwd ---> change user password
-
-======================== Permissions ========================
 chmod ---> changes permission of a file or directory
 chown <owner>:<group> ---> change owner and group of a file or directory
 
-git sta====================VARIABLES and Shell expansions====================
+
+
+====================VARIABLES and Shell expansions====================
 
 Parameter - hocijaká entita, ktorá ukladá hodnotu
 Premenná - parameter, ktorého hodnou je možné meniť
@@ -252,7 +251,6 @@ je možné dať aj negatívny offset ale musí byť s medzerou
 echo ${numbers: -3:2}
 #zobrazí sa
 78
-
 
 ====================SHELL VARIABLES====================
 Sú vždy písané veľkými písmenami
@@ -316,7 +314,7 @@ mocnina sa zapisuje inac v bc ako obycane 5^2=25
 jednoduchy pristup k domovskemu priecinku a k prieecinku inych uzivatelov
 Jednoduche prepinanie medzi sucasnym a predoslym priecinkom
 
-Ak chceme najst domaci priecinok nejakeho uzivatela
+Ak chceme najst domaci prienetcinok nejakeho uzivatela
 ~uzivatel, je to vlastne $HOME premmenna
 $PWD - premenna v ktorej je ulozene nasa momentalna cesta (current directory)
 	~+ je to rovnako ako $PWD
@@ -336,15 +334,30 @@ mv <oldfile> <newfile>  #premenuje old na new
 	mv oldfolder/ ~/destination # presunie celý priečinok do priečinku v home/destination
 	mv destina/copy_me/ ./jackopt # vezme zložku copy_me/ presunie ju do current priečinku a premenuje ju na jackopt
 	
+====================PORTs====================
+cat /etc/services
+lsof #zobrazi otvorene porty
+netstat #zobrazi vsetky porty
+		-t: Display all TCP ports
+		-u: Display all UDP ports
+		-I: providing listening server sockets
+		-P: Show PID and names of sockets programs
+		-n: It is executed so that the names are not resolved
+		grep LISTEN: Filter the output to display open ports in LISTEN status using the grep command
+sudo netstat -tulpn | grep LISTEN
+ss -l option: show listening ports
+	-lt option: show listening TCP ports
+	-tul option: Access a list of TCP and UDP listening ports
+	-n option: to access the listening port of the specified service
+nmap -sT -O localhost #prehladavanie a identifikacia otovrenych portov na local host
 
-
-
-
-
-
-
-
-
-
-
-
+====================Firewall====================
+https://www.digitalocean.com/community/tutorials/how-to-set-up-a-firewall-with-ufw-on-debian-11-243261243130246d443771547031794d72784e6b36656d4a326e49732e
+apt-get install ufw
+sudo ufw show #ukaze ako nastavovat ufw
+sudo ufw default deny incoming #zablokujeme prichadzajuce pripojenie
+sudo ufw default allow outgoing #odblokujeme odch. pripojenie
+sudo ufw allow ssh #povolit ssh pripojenie
+sudo ufw allow 22 #povolit ssh pripojenie pomocou portu 22
+sudo ufw status numbered # zistime ake porty sme povolili, ukaze nam to ciselne
+sudo ufw disable #vypne firewall
