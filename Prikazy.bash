@@ -47,6 +47,51 @@ cut - oreže data
 0> output
 0< input
 2> error
+>> vytovri/prida do suboru 
+<<< redirect Stringu do
+	napr tr -s " " <<< "nejaky string"
+====================EOF-heredoc====================
+
+#syntax
+[COMMAND] <<[-] 'EOF' #Ak je oddeľujúci identifikátor bez úvodzoviek, shell nahradí všetky premenné, príkazy a špeciálne znaky.
+	HERE-DOCUMENT
+EOF
+#Appending a minus sign to the redirection operator <<-, will cause all leading tab characters to be ignored. This allows you to use indentation when writing here-documents in shell scripts. Leading whitespace characters are not allowed, only tab
+
+/////Priklady 
+-------
+#EOF bez uvodzoviek
+#vstup
+cat << EOF >> text.txt #cely textovy retazec sa zapise do text.txt, ale nezobrazi sa na terminale
+The current working directory is: $PWD
+You are logged in as: $(whoami)
+EOF
+#vystp
+The current working directory is: /home/linuxize
+You are logged in as: linuxize
+-------
+#EOF s uvodzovkami
+#vstup
+cat <<- "EOF"
+The current working directory is: $PWD
+You are logged in as: $(whoami)
+EOF
+
+#vystup
+The current working directory is: $PWD
+You are logged in as: $(whoami)
+-------
+#The heredoc input can also be piped. In the following example the sed command will replace all instances of the l character with e:
+
+#vstup
+cat <<'EOF' |  sed 's/l/e/g'
+Hello
+World
+EOF
+
+#vystup
+Heeeo
+Wored
 
 ====================
 xargs - ak command neakceptuje STDIN, tak použiješ xargs, zmení input na 
@@ -361,3 +406,71 @@ sudo ufw allow ssh #povolit ssh pripojenie
 sudo ufw allow 22 #povolit ssh pripojenie pomocou portu 22
 sudo ufw status numbered # zistime ake porty sme povolili, ukaze nam to ciselne
 sudo ufw disable #vypne firewall
+
+/////////PREKLAD ZNAKOV A MAZANIE SLOV
+====================SED====================
+#dokáže vykonávať množstvo funkcií v súbore, ako napríklad vyhľadávanie, vyhľadávanie a nahrádzanie, vkladanie alebo mazanie.
+https://www.geeksforgeeks.org/sed-command-in-linux-unix-with-examples/
+#input geekfile.txt:
+	unix is great os. unix is opensource. unix is free os.
+	learn operating system.
+	unix linux which one you choose.
+	unix is easy to learn.unix is a multiuser os.Learn unix .unix is a powerful.
+
+sed 's/unix/linux/2' geekfile.txt # Replacing the nth occurrence of a pattern in a line : Use the /1, /2 etc flags to replace the first, second occurrence of a pattern in a line
+
+#Output :
+	unix is great os. linux is opensource. unix is free os.
+	learn operating system.
+	unix linux which one you choose.
+	unix is easy to learn.linux is a multiuser os.Learn unix .unix is a powerful.	
+
+====================AWK====================
+#můžete vytvářet složité programy pro manipulaci s textovými soubory a jejich zpracování.
+echo 'hello world' | awk '{gsub(/world/,"universe"); print}'
+#Output:
+'hello universe'
+-----------
+
+====================tr====================
+#Príkaz tr je nástroj na prekladanie alebo odstraňovanie znakov.
+Command | tr <'old'> <'new'>  
+#Vstup
+WELCOME TO 
+GeeksforGeeks
+
+cat greekfile | tr [:lower:] [:upper:]
+
+#Output:
+WELCOME TO
+GEEKSFORGEEKS
+-----------
+#je mozne dat input s redirection
+tr [:lower:] [:upper:] <greekfile
+-----------
+#prelozi white-space na tabulator
+echo "Welcome To GeeksforGeeks" | tr [:space:] "\t"
+-----------
+#preklad z () do {} a zapis do newfile
+#Vstup
+{WELCOME TO} 
+GeeksforGeeks
+
+tr "{}" "()" <greekfile >newfile.txt
+
+#Output:
+(WELCOME TO) 
+GeeksforGeeks
+-----------
+#To remove all the digits from the string, you can use
+
+$ echo "my ID is 73535" | tr -d [:digit:]
+or
+$ tr -d [:digit:] <<< "my ID is 73535"
+
+----------- Complement -c -----------
+#Volba --complement obrátí výběr a vytiskne to, co není vybráno
+echo "my ID is 73535" | tr -cd [:digit:]
+#vystup
+
+
