@@ -1,0 +1,8 @@
+#idea
+.idea/
+
+#Jenkins
+Jenkins/
+
+#logs
+*.log
