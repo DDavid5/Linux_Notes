@@ -426,11 +426,20 @@ sed 's/unix/linux/2' geekfile.txt # Replacing the nth occurrence of a pattern in
 	unix is easy to learn.linux is a multiuser os.Learn unix .unix is a powerful.	
 
 ====================AWK====================
+SYNTAX 'awk '{action}' your_file_name.txt
+
 #můžete vytvářet složité programy pro manipulaci s textovými soubory a jejich zpracování.
 echo 'hello world' | awk '{gsub(/world/,"universe"); print}'
 #Output:
 'hello universe'
 -----------
+#The $1 stands for the first field, in this case the first column.
+awk '{print $2}' information.txt
+
+-----------
+#You can also specify the line you want printed from your chosen column:
+awk '{print $1}' information.txt | head -1 
+
 
 ====================tr====================
 #Príkaz tr je nástroj na prekladanie alebo odstraňovanie znakov.
