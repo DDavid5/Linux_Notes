@@ -53,7 +53,7 @@ cut - oreže data
 ====================EOF-heredoc====================
 
 #syntax
-[COMMAND] <<[-] 'EOF' #Ak je oddeľujúci identifikátor bez úvodzoviek, shell nahradí všetky premenné, príkazy a špeciálne znaky.
+[COMMAND] /</<[-] 'EOF' #Ak je oddeľujúci identifikátor bez úvodzoviek, shell nahradí všetky premenné, príkazy a špeciálne znaky.
 	HERE-DOCUMENT
 EOF
 #Appending a minus sign to the redirection operator <<-, will cause all leading tab characters to be ignored. This allows you to use indentation when writing here-documents in shell scripts. Leading whitespace characters are not allowed, only tab
@@ -62,7 +62,7 @@ EOF
 -------
 #EOF bez uvodzoviek
 #vstup
-cat << EOF >> text.txt #cely textovy retazec sa zapise do text.txt, ale nezobrazi sa na terminale
+cat < EOF >> text.txt #cely textovy retazec sa zapise do text.txt, ale nezobrazi sa na terminale
 The current working directory is: $PWD
 You are logged in as: $(whoami)
 EOF
@@ -72,7 +72,7 @@ You are logged in as: linuxize
 -------
 #EOF s uvodzovkami
 #vstup
-cat <<- "EOF"
+cat /</<- "EOF"
 The current working directory is: $PWD
 You are logged in as: $(whoami)
 EOF
@@ -84,7 +84,7 @@ You are logged in as: $(whoami)
 #The heredoc input can also be piped. In the following example the sed command will replace all instances of the l character with e:
 
 #vstup
-cat <<'EOF' |  sed 's/l/e/g'
+cat </<'EOF' |  sed 's/l/e/g'
 Hello
 World
 EOF
