@@ -1,4 +1,4 @@
-====================ETCD====================
+	====================ETCD====================
 ETCDCTL can interact with ETCD Server using 2 API versions - Version 2 and Version 3.  By default its set to use Version 2. Each version has different sets of commands.
 
 For example ETCDCTL version 2 supports the following commands:
@@ -737,7 +737,7 @@ token,user10,userID,group1
 password1,user1,u0001
 password2,user2,u0002                                                                                                                                       password3,user3,u0003////
 
------------TLS/SSL
+-----------TLS/SSL-----------
 Asymmetric encryption - pouziva Private a Public key (public lock)
 
 na vygenerovanie Public Private keys na SSH spojenie - pre administraciu
@@ -760,3 +760,141 @@ Na strane servru vygenerujeme public/private key
 
 openssl genrsa -out my-privat.key 0123
 openssl rsa -in my-bank.key -pubout > my
+
+-------------SSH
+
+na vygenerovanie Public Private keys na SSH spojenie so servrom si potrebujeme vygenerovať cez ssh-keygen 2 kluce, pomocou ktorych mozeme pristupovat na server - administratorske ucely. Public key umiestnime na server, ktorý chceme odomknúť private keyom.
+
+id_rsa - nemôže byť zdieľaný a musí byť len u užívateľa na PC
+
+id_rsa.pub - môže byť zdieľaný, ale otvorený môže byť len private keyom
+
+//////Pripojenie cez SSH s private key
+
+ssh -i id_rsa user1@server1
+
+#najdeme Public key
+cat ~/.ssh/authorized_keys
+tento kluc mozme kopirovat na viacero servrov
+ak chceme aby na server pristupovala ina osoba, musiem jej tiez vygenerovat ssh kluc a pridat ho do ~/.ssh/authorized_keys 
+
+#Na strane servru vygenerujeme SSL public/private key
+
+openssl genrsa -out my-privat.key 0123
+openssl rsa -in my-bank.key -pubout > my
+
+//////Pomenovanie cert/key
+---Public key
+*.crt, *.pem
+
+---Private key
+*.key, *-key.pem
+
+----CA keys
+ca.key - private key for CA
+
+ca.crt - public key for CA
+
+////////Generovanie TLS - OpenSSL
+Vytvorenie klucov pre CA - certificate autohrity
+#Generovanie private key :
+openssl genrs -out ca.key 
+#Ziadost na podpis:
+openssl req - new -key ca.key -subj "/CN=KUBERNETES-CA" -ou  -> ca.csr
+#Podpisanie cert:
+ opensslx509 -req -in ca.csr -signkey ca.key -out ca.crt -> ca.crt
+-------------------------
+Vytvorenie klucov pre klientov - admin user a ostatne cert
+#Generovanie private key :
+openssl genrs -out admin.key 2048  -> admin.key
+
+#Ziadost na podpis:
+#v ziadosti musime uviest, ze sa jedna o group ADMIN (master:system), ktora ma admin privilegia
+openssl req - new -key admin.key -subj "/CN=kube-admin/O=system:master" -out admin.csr -> admin.csr
+
+#Podpisanie cert:
+opensslx509 -req -in admin.csr -CA ca.crt -CAkey ca.key -out admin.crt-> admin.crt
+
+////////Priklad zapisu cert do YAML
+#Zapis certifikatov do kube-config.yaml
+
+apiVersion: v1
+clusters:
+- cluster:
+    certificate-authority: ca.crt
+    server: https://kube-apiserver:6443
+  name: kubernetes
+kind: Config
+users:
+- name: kubernetes-admin
+   user:
+     client-certificate: admin.crt
+     client-key: admin.key
+----------------------
+
+----Serverside cert
+
+#ETCD server moze byt nasadeny ako cluster na viac servery (HA). Komuikaciu ETCD medzi roznymi servrami zabezpecuje bezpecnu komuukaciu peer certifikat.
+
+========KUBE-APISERVER====:
+kubernetes
+kubernetes.default
+kubernetes.default.svc
+kubernetes.default.svc.cluster.local
+Vsetky tieto mena musia byt uvedene v certifikate, aby bolo mozne spojit sa
+
+-----Generovanie kube-apiserver key
+
+openssl genrs -out apiserver.key 2048 -> apiserver.key
+openssl req - new -key apiserver.key -subj "/CN=kube-apiserver" -out apiserver.csr -> apiserver.csr
+
+#APIserver ma alternativne mena, tieto je potrebne zadat do config filu do sekcie
+
+[alt_names] -> openssl.cnf
+
+-----Podpisanie cert
+opensslx509 -req -in apiserver.csr -CA ca.crt -CAkey ca.key -out apiserver.crt-> apiserver.crt
+#V kube-apiserver configu, musime urcite aj to kde sa nachadzaju certifikaty pre etcd, kebelet, ca/tls cert
+
+-----------Generovanie cert pre kubectl Nodes (server cert) - kubelet
+
+#pre každy node musime zvlast upravit kubelet-config.yaml a doplniť tam informacie o ca.pem
+
+kubelet-config.yaml:
+
+authentification:
+  x509:
+    clientCAFile: "/var/lib/kubernetes/ca.pem"
+tlsCertFile: "/var/lib/kubelet/kubelet-node1.crt"
+tlsPrivateKeyFile: "/var/lib/kubelet/kubelet-node1.key"
+
+---------Detaily certifikatu
+
+//////APISERVER configfile
+
+#v configfile najdeme cesty k vsetkym certifikatom
+cat /etc/kubernetes/manifests/kube-apiserver.yaml
+
+#detaily jednotlivych certfikatov dekodujeme a zobrazime pomocou
+openssl x509 -in /etc/kubernetes/pki/apiserver.crt -text -noout
+
+===Service logs - hardway
+#zobrazenie logov, ak sme konfigurovali cluster od 0
+journalctl -u etcd.service -l
+
+===Service logs - by kubeadm
+#zobrazenie logov ak sme na konfiguraciu pouzili kubeadm - vsetko je spustene ako POD
+kubectl logs etcd-master
+
+!!!!! v pripade, ze spadne kubectl, musime logy prehliadat o level nizsie v docker logs !!!!
+
+Priklady na vyhladavanie v CERT
+-----Identify the ETCD Server Certificate used to host ETCD server
+#Look for cert-file option in the file /etc/kubernetes/manifests/etcd.yaml.
+-----Identify the ETCD Server CA Root Certificate used to serve ETCD Server.
+Look for CA Certificate (trusted-ca-file) in file /etc/kubernetes/manifests/etcd.yaml.
+-----What is the Common Name (CN) configured on the Kube API Server Certificate?
+openssl x509 -in /etc/kubernetes/pki/apiserver.crt -text and look for Subject CN.
+-----What is the Common Name (CN) configured on the ETCD Server certificate?
+openssl x509 -in /etc/kubernetes/pki/etcd/server.crt -text and look for Subject CN.
+
