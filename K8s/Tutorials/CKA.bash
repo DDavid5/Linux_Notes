@@ -845,8 +845,8 @@ Vsetky tieto mena musia byt uvedene v certifikate, aby bolo mozne spojit sa
 
 -----Generovanie kube-apiserver key
 
-openssl genrs -out apiserver.key 2048 -> apiserver.key
-openssl req - new -key apiserver.key -subj "/CN=kube-apiserver" -out apiserver.csr -> apiserver.csr
+openssl genrs -out apiserver.key 2048 -----> apiserver.key
+openssl req -new -key apiserver.key -subj "/CN=kube-apiserver" -out apiserver.csr ------> apiserver.csr
 
 #APIserver ma alternativne mena, tieto je potrebne zadat do config filu do sekcie
 
@@ -897,4 +897,57 @@ Look for CA Certificate (trusted-ca-file) in file /etc/kubernetes/manifests/etcd
 openssl x509 -in /etc/kubernetes/pki/apiserver.crt -text and look for Subject CN.
 -----What is the Common Name (CN) configured on the ETCD Server certificate?
 openssl x509 -in /etc/kubernetes/pki/etcd/server.crt -text and look for Subject CN.
+
+
+======Certificates signing request CSR====
+Vsetky operacie zodpovedne za certifikaty su robene Controller Managerom
+
+#automatizuje vytvaranie certifikatov
+CertificateSigningRequest OBJECT .CSR
+
+////Postup
+#user vygeneruje key
+openssl genrsa -out jane.key 2048
+#z vytvorime yaml subor
+////jane-csr.yaml
+apiVersion: certificates.k8s.io/v1
+kind: CertificateSigningRequest
+metadata: 
+	name: jane
+spec:
+	expirationSeconds: 600 #second
+	usages:
+	- digital signature
+	- key encipherment
+	- server auth
+	reguest: #doo tohto pola specifikujem signing request
+				#musime ho tam ale vlozit cez encoding base64 nie ako plain text  
+				
+		vystup z prikazu cat jane.csr | base64
+
+#spustsime CSR 
+kubectl apply -f akshay-csr.yaml
+
+
+------------------
+#vygeneruje signing req s menom certu a posle ziadost adminovy
+openssl req -new -key jane.key -subj "/CN=jane" -out jane.csr
+#administrator ziadost prevezme a vytvori CertificateSigningRequest objekt
+ 
+
+	
+/// Prikazy 
+#na zobrazenie signing req
+kubectl get csr
+#schvalenie signing request
+kubectl certificate approve jane
+#zobrazenie certifikatu v yaml formate 
+#detail grupy do ktoreho cert spada
+kubectl get csr jane -o yaml #certikata je zakodvany
+#cert dekodujeme 
+echo "text certfikatu" | base64 --decode
+
+
+======Kubeconfig====
+
 
