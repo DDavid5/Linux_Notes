@@ -737,7 +737,7 @@ token,user10,userID,group1
 password1,user1,u0001
 password2,user2,u0002                                                                                                                                       password3,user3,u0003////
 
------------TLS/SSL
+////TLS/SSL - Certifikaty 
 Asymmetric encryption - pouziva Private a Public key (public lock)
 
 na vygenerovanie Public Private keys na SSH spojenie - pre administraciu
@@ -749,13 +749,13 @@ Vygeneruje nam 2 kluce, pomocou ktorych mozeme pristupovat na server - administr
 id_rsa
 id_rsa.pub
 
-///Public key
+-------Public key
 #najdeme Public key
 cat ~/.ssh/authorized_keys
 tento kluc mozme kopirovat na viacero servrov
 ak chceme aby na server pristupovala ina osoba, musiem jej tiez vygenerovat ssh kluc a pridat ho do ~/.ssh/authorized_keys
 
-/////Public key na strane servru - aby mal uzivatel pristup
+-------Public key na strane servru - aby mal uzivatel pristup
 Na strane servru vygenerujeme public/private key
 
 openssl genrsa -out my-privat.key 0123
