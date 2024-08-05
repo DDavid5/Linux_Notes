@@ -458,4 +458,45 @@ users:
 ///////Prikazy 
 kubectl config view #zobrazenie momentalneho config filu, ake nespecifikujeme aky, tak pouzije predvoleny z $HOME/.kube/config
 kubectl config view --kubeconfig=my-custom-file #specifikujem konkretny configfile
+#ak necheme pouzivat --kubeconfig tak ziadany configfile musime nakopirovat do /root/.kube/config
 kubectl config use-context prod-user@production #uprava configfilu
+
+====================Autorization====================
+-------RBAC
+
+////Prikazy
+kubectl get roles #zisti kolko ROLE existuje v defautl NS
+kubectl get rolebindings
+---------
+k auth can-i create deployments
+k auth can-i deletenodes #zistim ake mam opravenia 
+#ak som admin mozem oskusat opravnenia bez toho aby som sa prihlasil
+k auth can-i create deployments --as dev-user
+#zistime ci dev-user ma moznost create deployment v namespace test
+k auth can-i create deployments --as dev-user --namespace test
+#zistme ci user dev-user ma moznost get pody
+kubectl get pods --as dev-user 
+
+--------- Zistenie aku autorizaiu ma API server
+k describe --namespace kube-system pod apiserver #and look for --authorization-mode
+
+---------Vytvranie role\rolebindings
+#mozme vytvorit priamo cez create alebo si vytovrime svoj vlastny yaml subor imperative/declarativ
+https://kubernetes.io/docs/reference/access-authn-authz/rbac/#role-example
+https://kubernetes.io/docs/reference/access-authn-authz/rbac/#rolebinding-example
+
+#role
+kubectl create role developer --namespace=default --verb=list,create,delete --resource=pods
+#binding role 
+kubectl create rolebinding dev-user-binding --namespace=default --role=developer --user=dev-user
+
+----ClusterRoles
+
+----Role Bindings
+
+
+
+
+
+
+
