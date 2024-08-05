@@ -410,3 +410,52 @@ kubeadm upgrade node config --kubelet-version <version>
 systemctl restart kubelet
 
 ====================Security====================
+
+------ConfigFile------
+#specifikujeme v nom udaje o certifikatoch
+#je umiestneny v $HOME/.kube/config
+///////YAML FILE
+apiVersion: v1
+kind: Config
+current-context: dev-user@google #specifikuje ktory ma byt predvoleny
+clusters: 
+- name: my-kube-playground
+  cluster:
+    certificate-authority: ca.crt #lepsie pouzit celu cestu k certifikatom
+    #mozeme pouzit aj obsah konkretneho crt pouzitim base64
+    certificate-authority-data: vystup z: cat ca.crt | base64 
+    server: https://my-kube-playground:6443
+- name: development
+ . . . #skrite hodnoty
+- name: production
+ . . . 
+- name: google
+ . . . 
+
+contexts:
+- name: my-kube-admin@my-kube-playground
+  context:
+    cluster: my-kube-admin 
+    user: my-kube-admin
+    namespace: finance
+- name: dev-user@google
+. . .
+- name: prod-user@produciton
+. . .
+
+users:
+- name: my-kube-admin
+  user:
+    client-certificate: admin.crt
+    client-key: admin.key
+- name: admin
+. . .
+- name: dev-user
+. . .
+- name: prod-user
+. . .
+
+///////Prikazy 
+kubectl config view #zobrazenie momentalneho config filu, ake nespecifikujeme aky, tak pouzije predvoleny z $HOME/.kube/config
+kubectl config view --kubeconfig=my-custom-file #specifikujem konkretny configfile
+kubectl config use-context prod-user@production #uprava configfilu
