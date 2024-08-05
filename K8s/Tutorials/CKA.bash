@@ -760,3 +760,23 @@ Na strane servru vygenerujeme public/private key
 
 openssl genrsa -out my-privat.key 0123
 openssl rsa -in my-bank.key -pubout > my
+
+====================Autorization====================
+-NODE
+-ABAC
+-RBAC - Role Based Access Control
+-Webhook
+
+-----RBAC
+
+Vytvoríme RBAC yaml file kde specifikujeme Rolu
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+
+Po vytvoreni ROLE musime vytvorit Role-binding
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+
+
+
+
