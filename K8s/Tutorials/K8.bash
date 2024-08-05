@@ -490,9 +490,9 @@ kubectl create role developer --namespace=default --verb=list,create,delete --re
 #binding role 
 kubectl create rolebinding dev-user-binding --namespace=default --role=developer --user=dev-user
 
-----ClusterRoles
+====ClusterRoles
 
-----Role Bindings
+====Role Bindings
 
 
 
