@@ -30,8 +30,8 @@ na konci skriptu by nemal chýbať exit kód
 ====================Quotings====================
 3 typy zápisu citácií
 	spatné lomítko \backslash\ - odstranuje specialny vyznam dalsieho pismena
-	jednoduche uvodzovdky 'single qoutes' - odstranuju spec. vyznam pre vsetky znaky vramci 
-	dvojite uvodzovky "double qoutes" - odstranuje spec. vyznam zo vsetkych znakov okrem symbolu dolar $  spatného lomitka `backsticks` 
+	jednoduche uvodzovdky 'single qoutes' - odstranuju spec. vyznam pre vsetky znaky vramci uvodzoviek
+	dvojite uvodzovky "double qoutes" - odstranuje spec. vyznam zo vsetkych znakov okrem symbolu dolar $, spatného lomitka \ a `backsticks` 
 										- to znamena dolar ma vzdy specialny vyznam vramci ""
 
 Priklady:
@@ -40,6 +40,18 @@ filepath=C:\\Users\\sk8er\\Documents\\David #spatné lomitka musime odeskejpovat
 filepath1='C:\Users\sk8er\Documents\David' #nemoze obsahovat dalsiu jednoduchu uvodzovku
 filepath="C:\Users\\$USER\Documents\David" #moze obsahovat dolar a ` backsticks`, ak je dolar tak musime ho odeskapovat
 
+
+====================Command zapis s argumentom====================
+	  #mozny zapis commandu a argumentu 
+	  command: ["sleep","10"] #prva pozicia je vzdy command [entrypoint] ostane pozicie su argumetny [CMD]
+	  #pripadne
+	  command: 
+	  - "sleep"
+	  - "10"
+	  #toto je najprehladnejsia forma
+	  command: ["sleep2.0"] #prepisuje ENTRYPOINT
+	  args: ["10"] 	#prepisuje CMD prikaz v docker file,
+					#argument, ktory sa vlozi do premnennej sleep, viz docker file 
 
 
 
