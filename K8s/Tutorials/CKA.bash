@@ -809,5 +809,7 @@ k create serviceaccount <nazov-SA>
 k describe secret  <NazovSA-token-kbbdm>
 #vytvvorenie tokenu pre SA
 k create token <nazov SA>
+#Run the following command to use the newly created service account:
+kubectl set serviceaccount deploy/web-dashboard dashboard-sa
 
 
