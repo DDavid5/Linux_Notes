@@ -737,7 +737,11 @@ token,user10,userID,group1
 password1,user1,u0001
 password2,user2,u0002                                                                                                                                       password3,user3,u0003////
 
+<<<<<<< HEAD
 -----------TLS/SSL-----------
+=======
+////TLS/SSL - Certifikaty 
+>>>>>>> refs/remotes/origin/master_notes
 Asymmetric encryption - pouziva Private a Public key (public lock)
 
 na vygenerovanie Public Private keys na SSH spojenie - pre administraciu
@@ -749,18 +753,19 @@ Vygeneruje nam 2 kluce, pomocou ktorych mozeme pristupovat na server - administr
 id_rsa
 id_rsa.pub
 
-///Public key
+-------Public key
 #najdeme Public key
 cat ~/.ssh/authorized_keys
 tento kluc mozme kopirovat na viacero servrov
 ak chceme aby na server pristupovala ina osoba, musiem jej tiez vygenerovat ssh kluc a pridat ho do ~/.ssh/authorized_keys
 
-/////Public key na strane servru - aby mal uzivatel pristup
+-------Public key na strane servru - aby mal uzivatel pristup
 Na strane servru vygenerujeme public/private key
 
 openssl genrsa -out my-privat.key 0123
 openssl rsa -in my-bank.key -pubout > my
 
+<<<<<<< HEAD
 -------------SSH
 
 na vygenerovanie Public Private keys na SSH spojenie so servrom si potrebujeme vygenerovať cez ssh-keygen 2 kluce, pomocou ktorych mozeme pristupovat na server - administratorske ucely. Public key umiestnime na server, ktorý chceme odomknúť private keyom.
@@ -949,5 +954,57 @@ echo "text certfikatu" | base64 --decode
 
 
 ======Kubeconfig====
+=======
+====================Autorization====================
+-NODE
+-ABAC
+-RBAC - Role Based Access Control
+-Webhook
+
+-----RBAC
+
+Vytvoríme RBAC yaml file kde specifikujeme Rolu
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+
+Po vytvoreni ROLE musime vytvorit Role-binding
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+
+====================ServiceAccount====================
+2 druhy:
+---User Account
+	pouzivane ludmi - Admin, Developer, eetc. 
+
+ ///Prikazy
+ 
+-Service account
+	pouzivane strojmi (robotmi)  - Monitoring /prometheus/, Jenkins, etc. 
+Ak sa vytvori SA tak spolu s nim sa vytvori aj token (bez platnosti), ktory sluzi na autentifikaciu s KUBEAPI
+Token je ulozeny ako Secret object ako <NazovSA-token-kbbdm>
+Secret object je preojeny so SA
+Pre kazdy NS existuje defaultny SA. Ak sa vytvori novy pod, defaultny SA je automaticky prideleny PODu
+
+V detailu podu najdeme jaky token bol v pode pouzity a kde je ulozeny (Mounts):
+k exec -it <nazov_podu> -- ls /cesta/z/detaily/podu/mounts
+vystup su 3 subory ca.crt, token, namespace
+
+Ak v deploy zmenim SA, tak deployment sa postara o vytvorenie novych podov. Ak SA zmenim u Podu, tak ten sa novy nevytovri a je potrebne ho zmazat.
+Ak nechcem aby sa do podu automaticky zapisal token musim zapisat do pod=definition.yaml ------> spec.automountServiceAccountToken(false)
+
+Od verzie 1.22 sa o vytvorenie tokenov stara TokenRequestAPI a token je vlozeny ako projected volume
+Od verzie 1.24 je nutne pre kazdy SA vytvorit token (ma platnost)
+Ak chceme vytvorit token po staru (bez platnosti) tak v secret-definiton.yaml musime uviest do ----> metadata.annotations.kubernetes.io/service-account.name(nazovSA)
+
+///Prikazy
+#vytvorenie SA
+k create serviceaccount <nazov-SA>
+#zobrazenie Secret object SO
+k describe secret  <NazovSA-token-kbbdm>
+#vytvvorenie tokenu pre SA
+k create token <nazov SA>
+#Run the following command to use the newly created service account:
+kubectl set serviceaccount deploy/web-dashboard dashboard-sa
+>>>>>>> refs/remotes/origin/master_notes
 
 
