@@ -41,7 +41,20 @@ docker system prune #vymaže všetky nepoužíté images
 
 https://www.digitalocean.com/community/tutorials/how-to-remove-docker-images-containers-and-volumes
 
-
 docker stats #štatistky dockera
+
+==========Security==========
+Vsetky moznosti, ktore moze root delat (Linux Capabilieties):
+/user/include/linux/capability.h
+
+Docker spusta cont s limitovanym opravnenim - na rozdiel od root v systeme. 
+#rootovy v kontajnru pridam opravnenia na urcitu skupinu 
+docker run --cap-add MAC_ADMIN ubuntu
+#rootovy odoberiem opravnenia v konkretom kont
+docker run --cap-drop KILL ubuntu
+#prida vsetky opravnenia, ktore ma host root
+docker run --privileged ubuntu
+
+
 
 
