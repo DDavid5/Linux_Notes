@@ -23,7 +23,7 @@ docker run hello-world #stiahne Hello-world a tým zistíme, či docker naozaj b
 # To try something more ambitious, you can run an Ubuntu container with:
  # $ docker run -it ubuntu bash
  
- 
+
 docker version #zisti verziu dockeru
 
 docker pull debian #stiahni kontajner debianu
@@ -41,8 +41,30 @@ docker system prune #vymaže všetky nepoužíté images
 
 https://www.digitalocean.com/community/tutorials/how-to-remove-docker-images-containers-and-volumes
 
-
 docker stats #štatistky dockera
+==========RUN==========
+#spusti cont s user 1000 - standardne je spusteny s root opravnenim
+docker run --user=1000 ubuntu
+#mozeme upravit Dockerfile, v ktorom urcime, ze chceme aby sa cont vzdy spustal s urcitym uzivatelom
+USER <user>[:<group>]
+
+or
+
+USER UID[:GID]
+
+==========Security==========
+Vsetky moznosti, ktore moze root delat (Linux Capabilieties):
+/user/include/linux/capability.h
+
+Docker spusta cont s limitovanym opravnenim - na rozdiel od root v systeme. 
+#rootovy v kontajnru pridam opravnenia na urcitu skupinu 
+docker run --cap-add MAC_ADMIN ubuntu
+#rootovy odoberiem opravnenia v konkretom kont
+docker run --cap-drop KILL ubuntu
+#prida vsetky opravnenia, ktore ma host root
+docker run --privileged ubuntu
+
+
 
 
 ====================Seecurity====================
