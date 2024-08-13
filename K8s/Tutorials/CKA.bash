@@ -1005,6 +1005,16 @@ k describe secret  <NazovSA-token-kbbdm>
 k create token <nazov SA>
 #Run the following command to use the newly created service account:
 kubectl set serviceaccount deploy/web-dashboard dashboard-sa
->>>>>>> refs/remotes/origin/master_notes
+
+====================Private repository====================
+Na to aby sme vytvorili 
+
+///Prikazy
+#prihlasenie sa do private-registry
+docker login private-registry.io
+#spustenie msc z private repository
+docker run private-registry.io/apps/internall-app
+			       |             |      |
+				registry     library  image
 
 

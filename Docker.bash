@@ -45,3 +45,17 @@ https://www.digitalocean.com/community/tutorials/how-to-remove-docker-images-con
 docker stats #štatistky dockera
 
 
+====================Seecurity====================
+#Ak nieje specifikovane inac, procesy v docker sa vzdy spustaju ako root. 
+#Ak chceme spustit proces inym uzivatelom, tak pomocou commandu
+docker run ---user=meno_usra ubuntu sleep 3600
+#alebo v jeho Dockerfile daneho imagu
+FROM ubuntu
+
+USER meno_alebo_ID_usra
+
+#ak mame zmeneny Dockerfile tak musime zbuildit
+docker build -t my-image
+
+#vramci kontajneru mozeme vidiet beziace procesy
+ps aux

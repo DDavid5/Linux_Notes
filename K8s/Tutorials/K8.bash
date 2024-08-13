@@ -291,7 +291,7 @@ spec:
     limits.cpu: "10"
     limits.memory: 10Gi
 	
-====================apply====================
+
 
 ====================SCHEDULER/Binding====================
 #v YAML subore mozeme urcit na akom node sa ma pod vytvorit tym ze pridame nodeName pod
@@ -494,8 +494,22 @@ kubectl create rolebinding dev-user-binding --namespace=default --role=developer
 
 ====Role Bindings
 
+====================Private repository====================
 
-
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx
+  labels:
+    app: nginx
+	tier: frontend
+spec:
+	containers:
+	- name: nginx
+	  image: private-registry.io/apps/internall-app #nahradime celym menom domeny vid CKA.bash 
+#autenfikacia secret suboru
+	imagePullSecrets:
+	- name: regcred
 
 
 
