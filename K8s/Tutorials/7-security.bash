@@ -365,3 +365,20 @@ docker login private-registry.io
 docker run private-registry.io/apps/internall-app
 			       |             |      |
 				registry     library  image
+
+    
+====================Security Context====================
+# definuje nastavení oprávnění a řízení přístupu pro pod nebo kontejner, pod akym uzivatelom sa spusti urcity proces
+apiVersion: v1
+kind: Pod
+metadata:
+  name: security-context-demo-2
+spec:
+  securityContext:
+    runAsUser: 1000
+  containers:
+  - name: sec-ctx-demo-2
+    image: gcr.io/google-samples/hello-app:2.0
+    securityContext:
+      runAsUser: 2000
+      allowPrivilegeEscalation: false
