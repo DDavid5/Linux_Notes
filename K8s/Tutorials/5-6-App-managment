@@ -180,6 +180,25 @@ spec:
 		  valueFrom:
 			secretKeyRef:
 
+
+--------------Config Map
+https://kubernetes.io/docs/tasks/configure-pod-container/configure-pod-configmap/
+
+///////KEY Value format pre yaml
+	APP_COLOR: blue
+	APP_MOD: prod
+	
+///////YAML subor
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-config
+  labels:
+    app: ubuntu
+	tier: server
+data:
+	APP_COLOR: blue
+	APP_MOD: prod
 ====================Secrets====================
 Pouzivaju sa ako configmapy ale maju kodovanie 	nie sifrovanie
 
