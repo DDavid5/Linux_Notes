@@ -65,9 +65,6 @@ docker run --cap-drop KILL ubuntu
 docker run --privileged ubuntu
 
 
-
-
-====================Seecurity====================
 #Ak nieje specifikovane inac, procesy v docker sa vzdy spustaju ako root. 
 #Ak chceme spustit proces inym uzivatelom, tak pomocou commandu
 docker run ---user=meno_usra ubuntu sleep 3600
@@ -81,3 +78,8 @@ docker build -t my-image
 
 #vramci kontajneru mozeme vidiet beziace procesy
 ps aux
+
+==========Volumes==========
+Docker uklada vsetky volumes defaultne do /var/lib/docker/volume
+ak chceme spustit kont s nejakou volume:
+docker run --mount type=bind,source=/cesta/k/volume,target=/kde/sa/ma/volume/ulozit <nazovKontajneru>
