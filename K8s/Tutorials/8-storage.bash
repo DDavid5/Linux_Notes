@@ -36,10 +36,42 @@ spec
  #je požadavek uživatele na úložiště. Je podobný jako Pod. Pody spotřebovávají prostředky uzlu a PVC spotřebovávají prostředky PV
  #sluzi na spojenie s PV
  #kazda PVC moze mat len jedno spojenie (bind) s PV
- kind: PersistentVolume
+ kind: PersistentVolumeClaim
  spec:
 	accessModes:
 		- ReadWriteOnce
 	resoruces:
 		requests
 			storage: 500Mi
+
+#Once you create a PVC use it in a POD definition file by specifying the PVC Claim name under persistentVolumeClaim section in the volumes section like this:
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: mypod
+spec:
+  containers:
+    - name: myfrontend
+      image: nginx
+      volumeMounts:
+      - mountPath: "/var/www/html"
+        name: mypd
+  volumes:
+    - name: mypd
+      persistentVolumeClaim:
+        claimName: myclaim
+		
+=======Storage class=======
+#Nahradzuje PV
+#vyuziva providerov ako napr GCP, AWS - cloudy
+#v pripade potreby zdrojov, automaticky vytvori PV a priradi ich danemu podu. 
+#je potrebne upravit PVC s menom danej SC
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: myclaim
+spec:
+  storageClassName: slow
+
+
