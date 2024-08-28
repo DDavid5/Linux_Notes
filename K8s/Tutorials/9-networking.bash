@@ -122,3 +122,13 @@ ip netns exec red ping <ip adresa linky v inom NS>
 
 #vymazanie virtualneho kabelu
 ip -n <meno> link del <meno NS>
+
+#ukaz adresu typu bridge
+ip addr show type bridge
+
+#ukaze routovacie adresy
+ip route show 
+
+#zistenie sietovych statistik / napr na ktorom porte bezi aka sluzba
+netstat -nplt #n cisela hodnota IP adresy namiesto aliasu, -l listenig sockets, -t ukaz tcp 
+netstat -anp | grep etcd
