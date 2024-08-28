@@ -105,6 +105,12 @@ ip addr add 192.168.15.5/24 dev v-net-0 #ip addresa brigdu
 #NAT mode will mask all network activity as if it came from your Host OS, although the VM can access external resources.
 iptables -t nat -A POSTROUTING -s 192.168.15.0/24 -j MASQUERADE	
 
+---- CNI ----
+Vsetky pluginy, ktore mozeme pouzit v ramci K8s su nainstalvoane v  /opt/cni/bin
+Nastavenia su ulozene v /etc/cni/net.d
+
+
+
 ----Prikazy
 #zobraz NS na hostu
 ip netns
