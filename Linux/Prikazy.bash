@@ -93,13 +93,18 @@ EOF
 Heeeo
 Wored
 
-====================
+=====================XARGS===================
 xargs - ak command neakceptuje STDIN, tak použiješ xargs, zmení input na 
+
+xargs rm < /path/to/file
+#stout vymazem cez xargs
+find "$HOME/Linux/test" -type l | xargs rm
+
+=====================Tee===================
+
 tee - križovatka - napr uloží do súboru a vypíše v konzole napr:
 date | tee fulldate.txt | cut -d " " -f  - t.j. do súboru uloží plný dátum a na konzole vypíše len prvý stlpec
-touch vytvorí súbor
-mkdir - vytvorí zložku
-	mkdir -p /z1/z2 #ak cesta neexistuje tak vytvorí rodicovské 
+
 
 ====================Podmienka====================
 if [[ $beast || $neco == 1]]
@@ -150,14 +155,7 @@ alias getdate='date | tee fulldate.txt | cut --delimiter=" " --fields=1 | tee sh
 	file[1,2][a,b,c] -
 		file[1-5].txt -  nájde file1.txt, file2.txt... file5
 		file[A-Z]
-	
 
-====================TEXT EDITOR NANO====================	
-nano #text editor
- # ^ - ctrl
- # M - alt
- # ALT + A markovaci mod
- sudo nano /etc/nanorc # zmena nano nastavení 
 
 ====================Locate====================
 locate -i *.conf #lokalizeuje súbory, bez ohľadu na veľké a malé písmená, ktér majú koncovku .conf
@@ -426,7 +424,7 @@ sed 's/unix/linux/2' geekfile.txt # Replacing the nth occurrence of a pattern in
 	unix is easy to learn.linux is a multiuser os.Learn unix .unix is a powerful.	
 
 ====================AWK====================
-SYNTAX 'awk '{action}' your_file_name.txt
+SYNTAX 'awk '{action}' your_file_name.txt'
 
 #můžete vytvářet složité programy pro manipulaci s textovými soubory a jejich zpracování.
 echo 'hello world' | awk '{gsub(/world/,"universe"); print}'
@@ -481,5 +479,7 @@ $ tr -d [:digit:] <<< "my ID is 73535"
 #Volba --complement obrátí výběr a vytiskne to, co není vybráno
 echo "my ID is 73535" | tr -cd [:digit:]
 #vystup
+
+
 
 
