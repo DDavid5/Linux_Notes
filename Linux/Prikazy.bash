@@ -328,17 +328,19 @@ je funkcia, pomocou ktorej môžeme dať príkaz shellu, aby nahradil skutočnú
 Je mozne jeho vystup ulozit do premennej, takze vysledok je mozne pouzit neskor 
 
 SYNTAX
+$(date)
+
+#ulozenie do premennej
 time=$(date +%H:%m:%S)
 echo "Hello $USER, the time right now is $time"
-priklad
-tar -cvf ~/bash_course/my_backup_"$(date +%d-%m-%Y_%H-%M-%S)".tar ~/* 2>/dev/null
 #vystup je
 Hello pi, the time right now is 14:09:42
 
+priklad
+tar -cvf ~/bash_course/my_backup_"$(date +%d-%m-%Y_%H-%M-%S)".tar ~/* 2>/dev/null
 
 ====================Arithmetic EXPANSION====================
-
-Syntax for Arithmetic Expansion
+# umožňuje vyhodnotiť aritmetický výraz a nahradiť výsledok.
 #vie pracovat len s celymi cislami, nevie pracovat s desatinami 
 $(( expression ))
 x=4
