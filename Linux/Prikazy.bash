@@ -8,6 +8,8 @@ D, U používam na skrolovanie v manuali, keď hľadám cez /
 
 ====================File system====================
 var - tam nájdem Log files
+  auditd on - /var/log/audit/audit.log
+  auditd off; rsyslogd on - /var/log/messages
 temp - temporary files
 home - existujúci užívatelia
 dev - pripojené zariadenia (HDD, SSD)
@@ -27,9 +29,9 @@ man a následne príkaz /dir  -- hľadám zadaný výraz - D, U presúvam medzi 
 which - príkaz ktorý zisti cestu k executable files
 sudo su - #root
 
-====================Inštalovanie softvéru====================
+==================== Inštalovanie softvéru ====================
 
-chmod u+x <file> # urobí súbor pre user executable X  
+#chmod u+x <file> # urobí súbor pre user executable X
 chown - Change the owner and/or group of each FILE to OWNER and/or GROUP.
 read číta zadanie z klávesnice read name
  
@@ -43,12 +45,12 @@ tail - opak head
 cut - oreže data
 
 ====================Redirection==================== 
-- ak urobíme redirection už nieje možné PIPovať
-0> output
-0< input
-2> error
->> vytovri/prida do suboru 
-<<< redirect Stringu do
+#- ak urobíme redirection už nieje možné PIPovať
+#0> output
+#0< input
+#2> error
+#>> vytovri/prida do suboru
+#<<< redirect Stringu do
 	napr tr -s " " <<< "nejaky string"
 ====================EOF-heredoc====================
 
@@ -256,7 +258,7 @@ delgroup ---> remove group
 passwd ---> change user password
 chmod ---> changes permission of a file or directory
 chown <owner>:<group> ---> change owner and group of a file or directory
-
+newgrp menogrupy - refresh grupy, aby zacali platit pravidla
 
 
 ====================VARIABLES and Shell expansions====================
@@ -482,6 +484,24 @@ $ tr -d [:digit:] <<< "my ID is 73535"
 echo "my ID is 73535" | tr -cd [:digit:]
 #vystup
 
+-----------SELinux-----------
+#zobraz status SELinux
+getenforce
+#vypni ochranu
+sudo setenforce 0
 
+#je možné generovať iné pravidla pre SELinux, pozri ausearch
+ausearch
+#Check for the exact denials in the audit log:
+sudo ausearch -m avc -c kpropd
+#Generate a custom policy:
+sudo ausearch -m avc -c kpropd | audit2allow -M kpropd-policy
+#Apply the generated policy:
+sudo semodule -i kpropd-policy.pp
 
+-----------netcat-----------
+#je výkonný a ľahko použiteľný nástroj, ktorý možno použiť takmer na čokoľvek v Linuxe v súvislosti so zásuvkami TCP, UDP alebo UNIX.
+ nc -zv 192.168.1.15 22
+-z – sets nc to simply scan for listening daemons, without actually sending any data to them.
+-v – enables verbose mode.
 
