@@ -152,7 +152,7 @@ ansible-playbook variables_playbook.yaml -e @extra_vars_file.yaml
 
   # Handlers: sú spustene len raz na konci taskov, sluzia na notifikaciu
   handlers:
-    - name: MOTD changed
+      - name: MOTD changed
       debug:
         msg: The MOTD was changed
 
@@ -314,3 +314,22 @@ tasks:
 }
 
 #---JINJA2----
+#===Filter
+splitted: "{{ name.split(' ') | lower }}"
+joined: "{{ splitted | join('.') }}"
+
+# subor  musi byt ulozeny vo formate .j2, nasledne v nom je mozne pouzivat premenne
+
+#
+# ===IF
+{% if ansible_memtotal_mb > 100 %}
+Memory is large
+{% else %}
+Memory is small
+{% endif %}
+
+
+#===FOR
+{% for host in groups["all"] %}
+{{facts}}
+{% endfor %}
