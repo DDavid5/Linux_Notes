@@ -79,6 +79,10 @@ docker build -t my-image
 #vramci kontajneru mozeme vidiet beziace procesy
 ps aux
 
+#synchornizace času
+podman machine ssh sudo date --set $(date +'%Y-%m-%dT%H:%M:%S')
+
+
 ==========Volumes==========
 Docker uklada vsetky volumes defaultne do /var/lib/docker/volume
 ak chceme spustit kont s nejakou volume:

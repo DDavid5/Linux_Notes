@@ -17,9 +17,12 @@ etc - nastavenia
 media - zariadenia ako SD, alebo USB 
 bin - všetky príkazy, môžem vytvoriť bin v každom užívateľovi, ale potom musím tu cestu pridať "export PATH=$PATH:$HOME/bin" do ~/.bashrc (cez nano)
 	nano ~/.bashrc
-	a na koniec pridať export PATH=$PATH:$HOME/bin
-	potom aby sa zmena potvrdila je potrebné "source ~/.bashrc"
-	a potom cez chmod pridať x 
+#	a na koniec pridať export PATH=$PATH:$HOME/bin
+#	potom aby sa zmena potvrdila je potrebné "source ~/.bashrc"
+#	a potom cez chmod pridať x
+#
+ncdu - prehliadanie celého FS, je nutné nainštalovať
+
 systemctl status/start/stop...  #test status apache2,sql,php... 
 
 sudo !! #predošlý príkaz s root opravnením
