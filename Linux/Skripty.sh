@@ -25,7 +25,7 @@ _______________________
 bash skript.sh #spustenie skriptu
 
 # na konci skriptu by nemal chýbať exit kód
-#	exit 0
+	exit 0
 
 # _______________________ Quoting _______________________
 # 3 typy zápisu citácií

@@ -139,6 +139,9 @@ ansible-playbook variables_playbook.yaml -e @extra_vars_file.yaml
       private: False
 
   # Tasks: the list of tasks that will be executed within the playbook
+  #spustí pb od určitého tasku
+  ansible-playbook playbook.yml --start-at-task="Task Name"
+
   tasks:
     - name: Configure a MOTD (message of the day)
       copy:

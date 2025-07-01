@@ -142,7 +142,12 @@ tar # kompresia - pozri Cheat sheet
 tar -xf <file># x extrahuje súbur f- povinný, za f musí následovať názov tar súboru
 	-v --verbose #zobrazí text o priebehu
 	-cf <file> #vytovrí archív z nejakým názvom f
- 
+
+ tar -cpav --acls --selinux --exclude log -C /data/ -f /backup_home/backup.tar.gz . #-C z ktorej zložky bude robiť kompersiu -f názov súboru/kde bude uložený
+ tar -xpv --acls --selinux --same-owner -C /home/ -f backup.tar.gz
+
+ split -b 500M -d backup.tar.gz backup_
+
  
 mysql - prihlásenie do databáze
 SHOW DATABASES - zobrazí vytvorené databázy
@@ -507,4 +512,7 @@ sudo semodule -i kpropd-policy.pp
  nc -zv 192.168.1.15 22
 -z – sets nc to simply scan for listening daemons, without actually sending any data to them.
 -v – enables verbose mode.
+
+#PORT FORWARD
+ ssh -L 4321:bdpvm01-head01.hadoop.local:6182 root@virt1
 
